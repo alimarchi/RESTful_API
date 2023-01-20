@@ -1,14 +1,43 @@
-// Cargamos el módulo http en el servidor
-const http = require("http");
-// Seleccionamos el puerto 8000 para evitar conflictos con el front, puerto 3000
+// Importar los módulos express y mongoose
+const express = require("express");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
+
+// nos permite sacar la info del archivo .env
+require("dotenv").config();
+// almaceno la cadena de conexión
+const mongoString = process.env.DATABASE_URL;
+
+// vamos a conectar con la bbdd
+mongoose.connect(mongoString, { useNewUrlParser: true });
+// guardamos la conexión
+const db = mongoose.connection;
+// verificar si la conexión ha sido exitosa
+db.on("error", (error) => {
+  console.log(error);
+});
+// se ejecuta una única vez (por eso uso once y no on), cuando se conecta a la bbdd, en lugar de en cada petición
+db.once("connected", () => {
+  console.log("Successfully connected");
+});
+// recibir una notificación cuando la conexión se haya cerrado
+db.on("disconnected", () => {
+  console.log("Mongoose default connection is disconnected");
+});
+
+// Importación de controladores
+const users = require("./Controller/userController");
+
 const PORT = 8000;
-// Creamos un servidor http con una función callback que gestione los códigos de respuesta (req=require - la información que nos llega del front, res=response)
-const server = http.createServer(
-    // request contiene los detalles de la solicitud
-    // response enviará la respuesta al cliente
-    (req, res) => {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "text/html");
-        res.end("<h1>Hello, World!!!</h1>");
-    }
-).listen(PORT, () => {console.log(`Server running at http://localhost:${PORT}`)})
+// Crear la app
+const app = express();
+// Analizar los archivos json
+app.use(express.json());
+
+app.use("/users", users);
+
+app.listen(PORT, () => {
+  console.log(`server running at http://localhost:${PORT}`);
+});
+
+
