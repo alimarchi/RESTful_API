@@ -34,7 +34,7 @@ const app = express();
 // Analizar los archivos json
 app.use(express.json());
 
-app.use("/users", users);
+app.use("/houses", houses);
 
 app.listen(PORT, () => {
   console.log(`server running at http://localhost:${PORT}`);
