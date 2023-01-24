@@ -1,12 +1,15 @@
 // Importar express
 const express = require("express");
+const {verifyToken} = require("../lib/utils");
 const router = express.Router();
 
 // Importamos el modelo con el schema correspondiente
 const Model = require("../Model/userModel");
 
 // Escuchar peticiones get
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
+  // verifytoken para segurizar el endpoint
+
   // Model.find()
   //   .then((data) =>
   //     res.status(200).json({ status: "succeeded", data, error: null })

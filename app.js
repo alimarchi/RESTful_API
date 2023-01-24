@@ -27,6 +27,7 @@ db.on("disconnected", () => {
 
 // Importación de controladores
 const users = require("./Controller/userController");
+const logins = require("./Controller/loginController");
 
 const PORT = 8000;
 // Crear la app
@@ -35,9 +36,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/users", users);
+app.use("/auth", logins);
 
 app.listen(PORT, () => {
   console.log(`server running at http://localhost:${PORT}`);
 });
-
-
