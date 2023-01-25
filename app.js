@@ -26,7 +26,7 @@ db.on("disconnected", () => {
 });
 
 // Importación de controladores
-const users = require("./Controller/userController");
+const houses = require("./Controller/gotController");
 
 const PORT = 8000;
 // Crear la app
